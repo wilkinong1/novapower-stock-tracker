@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-invoices_year = pd.read_csv('invoices_year.csv')
-items = pd.read_csv('items.csv')
-purchases = pd.read_csv('purchases.csv')
-with_incoming = pd.read_csv('with_quantity.csv')
+invoices_year = pd.read_csv('novapower-stock-tracker/invoices_year.csv')
+items = pd.read_csv('novapower-stock-tracker/items.csv')
+purchases = pd.read_csv('novapower-stock-tracker/purchases.csv')
+with_incoming = pd.read_csv('novapower-stock-tracker/with_quantity.csv')
 with_incoming['item_id'] = with_incoming['item_id'].astype(str)
 
 def get_last_60_days(df, item_name, last_sale, last_sale_minus_60):
@@ -23,6 +23,7 @@ stock_tracker = last_purchase.merge(with_incoming, how='left', on=['item_name'])
 
 stock_tracker['check_stock'] = np.where(stock_tracker['available_stock'] < stock_tracker['purchase_last_60'], True, False)
 stock_tracker['check_stock_soft'] = np.where((stock_tracker['available_stock'] + stock_tracker['incoming_quantity']) < stock_tracker['purchase_last_60'], True, False)
+
 
 
 
