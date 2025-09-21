@@ -28,7 +28,7 @@ with main_col2:
     kpi1, kpi2 = st.columns(2, gap='small')
 
     with kpi1:
-        metric_data = invoice_data[invoice_data['item_name'] == st.session_state['selection_item']]
+        metric_data = invoice_data[(invoice_data['item_name'] == st.session_state['selection_item']) & (invoice_data['date'] >= st.session_state['selection_date_range'][0]) & (invoice_data['date'] <= st.session_state['selection_date_range'][1])]
         mean_quant = round(metric_data['item_quantity'].mean(), 2)
         st.metric('Mean Invoiced Quantity for Selected Period', mean_quant, border=True)
     with kpi2:
