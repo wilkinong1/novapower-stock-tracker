@@ -1,11 +1,28 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from google.cloud import storage
+import os
+from io import StringIO
 
-invoices_year = pd.read_csv('invoices_year.csv')
-items = pd.read_csv('items.csv')
-purchases = pd.read_csv('purchases.csv')
-with_incoming = pd.read_csv('with_quantity.csv')
+gcp_credentials = os.getenv("GCP_CREDENTIALS")
+bucket_name = "nova-power-cloud-storage-buckett"
+def get_file_gcs(bucket_name, blob_name):
+    client = storage.Client.from_service_account_info(gcp_credentials)
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+
+    if blob.name.endswith('.json'):
+        data = blob.download_as_text()
+        return json.loads(data)
+    elif blob.name.endswith('.csv'):
+        data = blob.download_as_text()
+        return pd.read_csv(StringIO(data))
+
+invoices_year = get_file_gcs(bucket_name, 'invoices_year.csv')
+items = get_file_gcs(bucket_name, 'items.csv')
+purchases = get_file_gcs(bucket_name, 'purchases.csv')
+with_incoming = get_file_gcs(bucket_name, 'with_quantity.csv')
 with_incoming['item_id'] = with_incoming['item_id'].astype(str)
 
 invoices_year['date'] = pd.to_datetime(invoices_year['date'])
@@ -25,4 +42,5 @@ stock_tracker = last_purchase.merge(with_incoming, how='left', on=['item_name'])
 
 stock_tracker['check_stock'] = np.where(stock_tracker['available_stock'] < stock_tracker['purchase_last_60'], True, False)
 stock_tracker['check_stock_soft'] = np.where((stock_tracker['available_stock'] + stock_tracker['incoming_quantity']) < stock_tracker['purchase_last_60'], True, False)
+
 
