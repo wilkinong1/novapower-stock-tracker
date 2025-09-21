@@ -28,7 +28,7 @@ with main_col2:
     kpi1, kpi2 = st.columns(2, gap='small')
 
     with kpi1:
-        metric_data = invoice_data[(invoice_data['item_name'] == st.session_state['selection_item']) & (invoice_data['date'] >= st.session_state['selection_date_range'][0]) & (invoice_data['date'] <= st.session_state['selection_date_range'][1])]
+        metric_data = invoice_data[(invoice_data['item_name'] == st.session_state['selection_item']) & (invoice_data['date'].dt.date >= st.session_state['selection_date_range'][0]) & (invoice_data['date'].dt.date <= st.session_state['selection_date_range'][1])]
         mean_quant = round(metric_data['item_quantity'].mean(), 2)
         st.metric('Mean Invoiced Quantity for Selected Period', mean_quant, border=True)
     with kpi2:
@@ -52,4 +52,5 @@ st.dataframe(show_invoiced_data(df=invoice_data, item_name=st.session_state['sel
 st.divider()
 st.header('Stock Tracker')
 st.dataframe(stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False]), hide_index=True)
+
 # st.dataframe(with_incoming)
