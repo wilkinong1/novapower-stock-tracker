@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-invoices_year = pd.read_csv('../sample_files/invoices_year.csv')
-items = pd.read_csv('../sample_files/items.csv')
-purchases = pd.read_csv('../sample_files/purchases.csv')
-with_incoming = pd.read_csv('../sample_files/with_quantity.csv')
+invoices_year = pd.read_csv('invoices_year.csv')
+items = pd.read_csv('items.csv')
+purchases = pd.read_csv('purchases.csv')
+with_incoming = pd.read_csv('with_quantity.csv')
 with_incoming['item_id'] = with_incoming['item_id'].astype(str)
 
 invoices_year['date'] = pd.to_datetime(invoices_year['date'])
@@ -25,3 +25,4 @@ stock_tracker = last_purchase.merge(with_incoming, how='left', on=['item_name'])
 
 stock_tracker['check_stock'] = np.where(stock_tracker['available_stock'] < stock_tracker['purchase_last_60'], True, False)
 stock_tracker['check_stock_soft'] = np.where((stock_tracker['available_stock'] + stock_tracker['incoming_quantity']) < stock_tracker['purchase_last_60'], True, False)
+
