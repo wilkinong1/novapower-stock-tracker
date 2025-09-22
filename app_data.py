@@ -5,9 +5,12 @@ from google.cloud import storage
 import os
 from io import StringIO
 import json
+import base64
 
-gcp_credentials_string = os.getenv("GCP_CREDENTIALS")
-gcp_credentials_dict = json.loads(gcp_credentials_string)
+gcp_credentials_b64 = os.getenv("GCP_CREDENTIALS")
+gcp_credentials_dict = json.loads(
+    base64.b64decode(gcp_credentials_b64).decode("utf-8")
+)
 
 # gcp_credentials = os.getenv("GCP_CREDENTIALS")
 # gcp_credentials = json.loads(gcp_credentials)
@@ -48,6 +51,7 @@ stock_tracker = last_purchase.merge(with_incoming, how='left', on=['item_name'])
 
 stock_tracker['check_stock'] = np.where(stock_tracker['available_stock'] < stock_tracker['purchase_last_60'], True, False)
 stock_tracker['check_stock_soft'] = np.where((stock_tracker['available_stock'] + stock_tracker['incoming_quantity']) < stock_tracker['purchase_last_60'], True, False)
+
 
 
 
