@@ -1,0 +1,27 @@
+name: Run App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:   # allows manual trigger
+
+jobs:
+  run-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Save GCP credentials to file
+        run: echo '${{ secrets.GCP_CREDENTIALS }}' > gcp_key.json
+
+      - name: Run app
+        run: python app_data.py
