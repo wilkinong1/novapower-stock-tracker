@@ -10,7 +10,8 @@ gcp_credentials = os.getenv("GCP_CREDENTIALS")
 gcp_credentials = json.loads(gcp_credentials)
 bucket_name = "nova-power-cloud-storage-buckett"
 def get_file_gcs(bucket_name, blob_name):
-    client = storage.Client.from_service_account_info(gcp_credentials)
+    # client = storage.Client.from_service_account_info(gcp_credentials)
+    client = storage.Client.from_service_account_file("gcp_key.json")
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
 
@@ -44,6 +45,7 @@ stock_tracker = last_purchase.merge(with_incoming, how='left', on=['item_name'])
 
 stock_tracker['check_stock'] = np.where(stock_tracker['available_stock'] < stock_tracker['purchase_last_60'], True, False)
 stock_tracker['check_stock_soft'] = np.where((stock_tracker['available_stock'] + stock_tracker['incoming_quantity']) < stock_tracker['purchase_last_60'], True, False)
+
 
 
 
