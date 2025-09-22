@@ -24,4 +24,4 @@ jobs:
         # It makes the GitHub Secret available as an environment variable
         env:
           GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: python app_data.py
+        run: python app.py
