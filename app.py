@@ -50,7 +50,23 @@ with plot_col_2:
 st.subheader('Invoice Data') 
 st.dataframe(show_invoiced_data(df=invoice_data, item_name=st.session_state['selection_item'], start_date=st.session_state['selection_date_range'][0], end_date=st.session_state['selection_date_range'][1]), column_config={'id': None, 'item_id': None, 'date': st.column_config.DateColumn(format='MM-DD-YYYY'), 'total_amount': None}, hide_index=True)
 st.divider()
-st.header('Stock Tracker')
-st.dataframe(stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False]), hide_index=True)
+st.header('Stock Tracker - 🟥')
+urgent_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
+urgent_df = urgent_df[(urgent_df['check_stock'] == True) & (urgent_df['check_stock_soft'] == True)]
+st.dataframe(urgent_df, ascending=[False, False]), hide_index=True)
+
+st.header('Stock Tracker -🟧')
+mid_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
+mid_df = mid_df[mid_df['check_stock'] + mid_df['check_stock_soft'] == 1]
+st.dataframe(mid_df, ascending=[False, False]), hide_index=True)
+
+st.header('Stock Tracker -🟩')
+good_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
+good_df = good_df[(good_df['check_stock'] == False) & (good_df['check_stock_soft'] == False)]
+st.dataframe(good_df, ascending=[False, False]), hide_index=True)
+
+
+
 
 # st.dataframe(with_incoming)
+
