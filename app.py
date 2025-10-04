@@ -57,7 +57,7 @@ st.dataframe(urgent_df, hide_index=True)
 
 st.header('Stock Tracker -🟧')
 mid_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
-mid_df = mid_df[mid_df['check_stock'] + mid_df['check_stock_soft'] == 1]
+mid_df = mid_df[(mid_df['check_stock'] ^ mid_df['check_stock_soft'])]
 st.dataframe(mid_df, hide_index=True)
 
 st.header('Stock Tracker -🟩')
@@ -69,5 +69,6 @@ st.dataframe(good_df, hide_index=True)
 
 
 # st.dataframe(with_incoming)
+
 
 
