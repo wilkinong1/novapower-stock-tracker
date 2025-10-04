@@ -53,20 +53,21 @@ st.divider()
 st.header('Stock Tracker - 🟥')
 urgent_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
 urgent_df = urgent_df[(urgent_df['check_stock'] == True) & (urgent_df['check_stock_soft'] == True)]
-st.dataframe(urgent_df, ascending=[False, False]), hide_index=True)
+st.dataframe(urgent_df, hide_index=True)
 
 st.header('Stock Tracker -🟧')
 mid_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
 mid_df = mid_df[mid_df['check_stock'] + mid_df['check_stock_soft'] == 1]
-st.dataframe(mid_df, ascending=[False, False]), hide_index=True)
+st.dataframe(mid_df, hide_index=True)
 
 st.header('Stock Tracker -🟩')
 good_df = stock_tracker[['item_name', 'last_sale', 'purchase_last_60', 'stock_on_hand', 'incoming_quantity', 'check_stock', 'check_stock_soft']].sort_values(by=['check_stock', 'incoming_quantity'], ascending=[False, False])
 good_df = good_df[(good_df['check_stock'] == False) & (good_df['check_stock_soft'] == False)]
-st.dataframe(good_df, ascending=[False, False]), hide_index=True)
+st.dataframe(good_df, hide_index=True)
 
 
 
 
 # st.dataframe(with_incoming)
+
 
